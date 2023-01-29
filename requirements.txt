@@ -1,4 +1,4 @@
-# FLASK
+# Core
 flask==2.2.2
 webargs==8.2.0
 
@@ -24,11 +24,15 @@ black==22.12.0
 flake8==6.0.0
 
 # For making requests
-#requests == 2.28.2
+requests == 2.28.2
 
 # Data structures for data analysis, time series, and statistics
-#pandas == 1.5.3
+pandas == 1.5.3
 
 # Package for array computing in Python
-#numpy == 1.24.1
+numpy == 1.24.1
+
+# Date and Time
+datetime == 5.0
+
 #----------------------------------------
