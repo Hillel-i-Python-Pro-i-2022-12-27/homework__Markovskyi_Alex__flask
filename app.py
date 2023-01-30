@@ -1,7 +1,12 @@
 from flask import Flask
+from webargs import fields
+from webargs.flaskparser import use_args
+
 from application.astrounats.reqst_and_save__astrounats import save_i_astronauts_to_file
 from application.googledrive.reqst_and_calc__google_drive import calculate_data
 from application.read_txt_file.read_file import save_file_with_content
+from application.services.create_table import create_table
+from application.services.db_connection import DBConnection
 from application.users_generator.generate_users import load_json_file_and_read
 
 app = Flask(__name__)
@@ -16,6 +21,18 @@ def page__index():  # put application's code here
         "<p><a href='./space'>SPACE</p>"
         "<p><a href='./mean'>MEAN</p>"
     )
+
+
+@app.route("/users/create")
+@use_args({"name": fields.Str(required=True), "age": fields.Int(required=True)}, location="query")
+def users__create(args):
+    with DBConnection() as connectiong:
+        with connectiong:
+            connectiong.execute(
+                "INSERT INTO users (name, age) VALUES (:name, :age);",
+                {"name": args["name"], "age": args["age"]},
+            )
+    return "Ok"
 
 
 @app.route("/get_content")
@@ -51,5 +68,6 @@ def page__mean():
     )
 
 
+create_table()
 if __name__ == "__main__":
     app.run()
