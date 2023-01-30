@@ -8,22 +8,19 @@ faker = Faker()
 file_name: str = "users_with_emails.json"
 
 
-def generic_users_to_json():
+def generic_users_to_json_file():
     file_to_path = FILES_OUTPUT_PATH.joinpath(file_name)
     data = []
     with open(file_to_path, mode="w") as file:
         for _ in range(10):
-            dict_ = {"name": faker.name(), "email": faker.email()}
+            dict_ = {"name": f"{faker.name()}", "email": f"{faker.email()}"}
             data.append(dict_)
-        json_object = json.dumps(data, indent=4)
-        file.writelines(json_object)
+        json.dump(data, file, indent=4)
+        file.close()
         return file_to_path
 
 
-def open_json_file(file: str = generic_users_to_json()):
-    # decode_to_lst = []
-    with open(file) as file:
-        # data = json.load(file)
-        # for idx, odj in enumerate(data):
-        #     decode_to_lst.append("".join(odj["name"] + " | " + odj["email"]))
-        return json.load(file)
+def load_json_file_and_read(file_to_path=generic_users_to_json_file()):
+    with open(file_to_path) as json_file:
+        json_data = json.load(json_file)
+        return json_data
