@@ -6,7 +6,7 @@ webargs==8.2.0
 faker==16.6.1
 
 # A framework for managing and maintaining multi-language pre-commit hooks.
-pre-commit==3.0.1
+pre-commit==3.0.2
 
 
 # ↓↓↓ THIS IN .pre-commit-config.yaml ↓↓↓
@@ -31,8 +31,5 @@ pandas == 1.5.3
 
 # Package for array computing in Python
 numpy == 1.24.1
-
-# Date and Time
-datetime == 5.0
 
 #----------------------------------------

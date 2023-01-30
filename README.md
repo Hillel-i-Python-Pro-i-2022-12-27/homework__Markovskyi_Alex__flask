@@ -1,42 +1,66 @@
-This is a first program with Makefile+Docker.
+# Django application
 
-For starting application use terminal command:
-
-
-
-# Init environment for developer
-make init-dev
+---
 
 
+## 🏠 Homework
 
-# Run application
-make homework-i-run
+Homework related actions.
 
-# Delete all packages 
-make homework-i-purge
+### ▶️ Run
 
-# Run tools for files from commit
-make pre-commit-run
+Make all actions needed for run homework from zero.
 
-# Run tools for all from commit
-make pre-commit-run-all
-
-
-
-
---== RUN APPLICATION WITH DOCKER ==--
-
-# Make all actions needed for run homework from zero.
+```shell
 make d-homework-i-run
+```
 
-# Make all actions needed for purge homework related data.
+### 🚮 Purge
+
+Make all actions needed for run homework from zero.
+
+```shell
 make d-homework-i-purge
+```
 
-# Just run.
+---
+
+## 🛠️ Dev
+
+### Initialize dev
+
+Install dependencies and register pre-commit.
+
+```shell
+make init-dev
+```
+
+---
+
+## 🐳 Docker
+
+Use services in dockers.
+
+### ▶️ Run
+
+Just run
+
+```shell
 make d-run
+```
 
-# STOP service.
+### ⏹️Stop
+
+Stop services
+
+```shell
 make d-stop
+```
 
-# Purge all data related with services.
-make d-purge:
+### 🚮 Purge
+
+Purge all data related with services
+
+```shell
+make d-purge
+```
