@@ -21,6 +21,7 @@ def page__index():  # put application's code here
         "<p><a href='./space'>SPACE</a></p>"
         "<p><a href='./mean'>MEAN</a></p>"
         "<br><h1>URL REQUESTS:</h1>"
+        "<li>/phone-book/create?contact_name*****&phone=***** - create row in phone book by contact_name and phone</li>"
         "<li>/phone-book/read-all - show all phone book by Primary Key</li>"
         "<li>/phone-book/read/<int> - show phone book by Primary Key</li>"
         "<li>/phone-book/update/<int>?contact_name=*****&phone=***** - update phone book row by Primary Key</li>"
