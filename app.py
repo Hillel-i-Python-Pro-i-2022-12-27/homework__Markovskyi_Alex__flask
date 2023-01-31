@@ -16,12 +16,12 @@ app = Flask(__name__)
 def page__index():  # put application's code here
     return (
         "<h1>INDEX PAGE</h1>"
-        "<p><a href='./get_content'>GET CONTENT</p>"
-        "<p><a href='./generate-users'>GENERATE USERS</p>"
-        "<p><a href='./space'>SPACE</p>"
-        "<p><a href='./mean'>MEAN</p>"
+        "<p><a href='./get_content'>GET CONTENT</a></p>"
+        "<p><a href='./generate-users'>GENERATE USERS</a></p>"
+        "<p><a href='./space'>SPACE</a></p>"
+        "<p><a href='./mean'>MEAN</a></p>"
         "<br><h1>URL REQUESTS:</h1>"
-        "<li>/phone-book/read-all - show all phone book data</li>"
+        "<li>/phone-book/read-all - show all phone book by Primary Key</li>"
         "<li>/phone-book/read/<int> - show phone book by Primary Key</li>"
         "<li>/phone-book/update/<int>?contact_name=*****&phone=***** - update phone book row by Primary Key</li>"
         "<li>/phone-book/delete/<int> - delete phone book row by Primary Key</li>"
