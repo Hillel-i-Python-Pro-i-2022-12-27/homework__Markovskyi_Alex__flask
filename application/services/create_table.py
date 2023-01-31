@@ -8,8 +8,8 @@ def create_table():
                 """
                 CREATE TABLE IF NOT EXISTS users (
                     pk INTEGER NOT NULL PRIMARY KEY,
-                    name VARCHAR NOT NULL,
-                    age INTEGER NOT NULL
+                    contact_name VARCHAR NOT NULL,
+                    phone value INTEGER NOT NULL
                     )
             """
             )

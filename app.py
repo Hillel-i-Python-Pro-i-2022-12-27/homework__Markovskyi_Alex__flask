@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, Response
 from webargs import fields
 from webargs.flaskparser import use_args
 
@@ -20,18 +20,88 @@ def page__index():  # put application's code here
         "<p><a href='./generate-users'>GENERATE USERS</p>"
         "<p><a href='./space'>SPACE</p>"
         "<p><a href='./mean'>MEAN</p>"
+        "<br><h1>URL REQUESTS:</h1>"
+        "<li>/phone-book/read-all - show all phone book data</li>"
+        "<li>/phone-book/read/<int> - show phone book by Primary Key</li>"
+        "<li>/phone-book/update/<int>?contact_name=*****&phone=***** - update phone book row by Primary Key</li>"
+        "<li>/phone-book/delete/<int> - delete phone book row by Primary Key</li>"
     )
 
 
-@app.route("/users/create")
-@use_args({"name": fields.Str(required=True), "age": fields.Int(required=True)}, location="query")
+@app.route("/phone-book/create")
+@use_args({"contact_name": fields.Str(required=True), "phone": fields.Str(required=True)}, location="query")
 def users__create(args):
-    with DBConnection() as connectiong:
-        with connectiong:
-            connectiong.execute(
-                "INSERT INTO users (name, age) VALUES (:name, :age);",
-                {"name": args["name"], "age": args["age"]},
+    with DBConnection() as connection:
+        with connection:
+            connection.execute(
+                "INSERT INTO phones (contact_name, phone) VALUES (:contact_name, :phone);",
+                {"contact_name": args["contact_name"], "phone": args["phone"]},
             )
+    return "Ok"
+
+
+@app.route("/phone-book/read-all")
+def users__read_all():
+    with DBConnection() as connection:
+        table_ = connection.execute("SELECT * FROM phones;").fetchall()
+    return "<br>".join([f'{row_["pk"]}. {row_["contact_name"]} - {row_["phone"]}' for row_ in table_])
+
+
+@app.route("/phone-book/read/<int:pk>")
+def users__read(pk: int):
+    with DBConnection() as connection:
+        table_ = connection.execute(
+            "SELECT * " "FROM phones " "WHERE (pk=:pk);",
+            {
+                "pk": pk,
+            },
+        ).fetchone()
+
+    return f'{table_["pk"]}. {table_["contact_name"]} - {table_["phone"]}'
+
+
+@app.route("/phone-book/update/<int:pk>")
+@use_args({"contact_name": fields.Str(), "phone": fields.Str()}, location="query")
+def users__update(args, pk: int):
+    with DBConnection() as connection:
+        with connection:
+            contact_name = args.get("contact_name")
+            phone = args.get("phone")
+
+            if contact_name is None and phone is None:
+                return Response("Need to provide at least one argument", status=400)
+
+            args_for_request = []
+            if contact_name is not None:
+                args_for_request.append("contact_name=:contact_name")
+
+            if phone is not None:
+                args_for_request.append("phone:=phone")
+
+            answer = ", ".join(args_for_request)
+
+            connection.execute(
+                "UPDATE phones " f"SET {answer} " "WHERE pk=:pk;",
+                {
+                    "pk": pk,
+                    "contact_name": contact_name,
+                    "phone": phone,
+                },
+            )
+    return "Ok"
+
+
+@app.route("/phone-book/delete/<int:pk>")
+def users__delete(pk: int):
+    with DBConnection() as connection:
+        with connection:
+            connection.execute(
+                "DELETE " "FROM phones " "WHERE (pk=:pk);",
+                {
+                    "pk": pk,
+                },
+            )
+
     return "Ok"
 
 
