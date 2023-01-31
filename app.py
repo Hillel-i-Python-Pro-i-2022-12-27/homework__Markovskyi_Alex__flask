@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, Response
 from webargs import fields
 from webargs.flaskparser import use_args
 
@@ -32,6 +32,71 @@ def users__create(args):
                 "INSERT INTO users (name, age) VALUES (:name, :age);",
                 {"name": args["name"], "age": args["age"]},
             )
+    return "Ok"
+
+
+@app.route("/users/read-all")
+def users__read_all():
+    with DBConnection() as connection:
+        users = connection.execute("SELECT * FROM users;").fetchall()
+    return "<br>".join([f'{user["pk"]}. {user["name"]} - {user["age"]}' for user in users])
+
+
+@app.route("/users/read/<int:pk>")
+def users__read(pk: int):
+    with DBConnection() as connection:
+        user = connection.execute(
+            "SELECT * " "FROM users " "WHERE (pk=:pk);",
+            {
+                "pk": pk,
+            },
+        ).fetchone()
+
+    return f'{user["pk"]}. {user["name"]} - {user["age"]}'
+
+
+@app.route("/users/update/<int:pk>")
+@use_args({"age": fields.Int(), "name": fields.Str()}, location="query")
+def users__update(args, pk: int):
+    with DBConnection() as connection:
+        with connection:
+            name = args.get("name")
+            age = args.get("age")
+
+            if name is None and age is None:
+                return Response("Need to provide at least one argument", status=400)
+
+            args_for_request = []
+            if name is not None:
+                args_for_request.append("name=:name")
+
+            if age is not None:
+                args_for_request.append("name:=name")
+
+            args_2 = ", ".join(args_for_request)
+
+            connection.execute(
+                "UPDATE users " f"SET {args_2} " "WHERE pk=:pk;",
+                {
+                    "pk": pk,
+                    "age": age,
+                    "name": name,
+                },
+            )
+    return "Ok"
+
+
+@app.route("/users/delete/<int:pk>")
+def users__delete(pk: int):
+    with DBConnection() as connection:
+        with connection:
+            connection.execute(
+                "DELETE " "FROM users " "WHERE (pk=:pk);",
+                {
+                    "pk": pk,
+                },
+            )
+
     return "Ok"
 
 
